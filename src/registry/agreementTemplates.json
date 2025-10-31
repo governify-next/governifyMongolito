@@ -1,0 +1,19 @@
+[
+    {
+        "id": "PSG2-2526",
+        "name": "PSG2-2526 Agreement",
+        "description": "This is a sample agreement template for PSG2-2526.",
+        "guaranteeTemplates": [
+            {
+                "id": "GITHUB_TEAM_NUMBER_COMMITS",
+                "operator": "<=",
+                "objectiveValue": 5
+            },
+            {
+                "id": "GITHUB_MEMBER_CONTRIBUTION_PERCENTAGE",
+                "operator": ">=",
+                "objectiveValue": 15
+            }
+        ]
+    }
+]

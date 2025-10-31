@@ -1,0 +1,38 @@
+[
+    {
+        "id": "a1",
+        "auditableVersion": 1,
+        "versions": [
+            {
+                "validity": {
+                    "earlyTermination": null,
+                    "timeZone": "America/Los_Angeles"
+                },
+                "contract": {
+                    "version": 1,
+                    "agreementTemplateId": "PSG2-2526",
+                    "guarantees": [
+                        {
+                            "id": "GITHUB_TEAM_NUMBER_COMMITS",
+                            "operator": "<=",
+                            "objectiveValue": 5
+                        },
+                        {
+                            "id": "GITHUB_MEMBER_CONTRIBUTION_PERCENTAGE",
+                            "operator": ">=",
+                            "objectiveValue": 15
+                        }
+                    ],
+                    "validity": {
+                        "initial": "2022-01-01",
+                        "end": "2023-01-01",
+                        "timeZone": "America/Los_Angeles"
+                    }
+                },
+                "moreInfo": {
+                    "dashboard": "http://example.com/dashboard/agreement/F2D3E6B2-1234-5678-9ABC-DEF123456789"
+                }
+            }
+        ]
+    }
+]
