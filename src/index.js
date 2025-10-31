@@ -88,11 +88,21 @@ collectorApp.listen(microservices.collector.port, () => {
 });
 
 // ============================== Reporter Application ==============================
+
+import reporterService from './reporter/reporterService.js';
+
 const reporterApp = express();
 
 reporterApp.get('/', (req, res) => {
   res.send('Reporter Application is running!');
 });
+
+reporterApp.post('/reports/generate',  express.json(), (req, res) => {
+  const { contract, periods, selectedGuarantees, element } = req.body;
+  const result = reporterService.generateReport(contract, periods, selectedGuarantees, element);
+  res.send(result);
+});
+
 reporterApp.listen(microservices.reporter.port, () => {
   console.log(`Reporter Application is running at http://localhost:${microservices.reporter.port}`);
 });

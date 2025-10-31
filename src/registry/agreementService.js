@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+
 const agreementsFilePath = path.resolve(__dirname, 'agreementInstances.json');
 let agreements = [];
 try {
@@ -45,12 +46,12 @@ function createAgreement(newAgreement) {
         auditableVersion: 1,
         versions: [
             {
+                version: 1,
                 validity: {
                     earlyTermination: null,
                     timeZone: newAgreement.initialVersion.validity.timeZone
                 },
                 contract: {
-                    version: 1,
                     agreementTemplateId: agreementTemplate.id,
                     guarantees: agreementTemplate.guaranteeTemplates,
                     validity: {
@@ -95,9 +96,10 @@ function getFullAgreementById(id) {
         for (const guarantee of version.contract.guarantees) {
             let guaranteeTemplate = guaranteeTemplates.find(template => template.id === guarantee.id);
             if (guaranteeTemplate) {
-                guarantee.operation = guaranteeTemplate.operation;
+                guarantee.numericExpression = guaranteeTemplate.numericExpression;
                 guarantee.metrics = guaranteeTemplate.metrics;
                 guarantee.info = guaranteeTemplate.info;
+                guarantee.multiTarget = guaranteeTemplate.multiTarget;
             }
         }
     }

@@ -1,44 +1,37 @@
-{
-  "development-teams": [
-    {
-      "name": "showcase",
-      "owner": "L1",
-      "teamId": "01",
-      "projectId": "UCLM-ISII-2526-TEST-GH-governify_bluejay-showcase_b35e04",
-      "notifications": {
-        "email": "jfernandez26@us.es,pafmon@gmail.com"
+[
+  {
+    "id": "repository1",
+    "labels": ["Global", "Showcase"],
+    "auditConfig": {
+      "credentials": {
+        "github": {
+          "owner": "governify-io",
+          "repository": "governify-samples",
+          "apikey": "ghp_ZZZZZZZZZZZZZZZZZZZZ"
+        }
+      }
+    },
+    "parts": [
+      {
+        "id": "member1",
+        "auditConfig": {
+          "credentials": {
+            "github": {
+              "username": "member1"
+            }
+          }
+        }
       },
-      "credentials": [],
-      "identities": [
-        {
-          "source": "github",
-          "repository": "bluejay-showcase",
-          "repoOwner": "governify"
-        }
-      ],
-      "members": [
-        {
-          "memberId": "Javier_FernándezCastillo",
-          "identities": [
-            {
-              "source": "github",
-              "username": "JaviFdez7"
+      {
+        "id": "member2",
+        "auditConfig": {
+          "credentials": {
+            "github": {
+              "username": "member2"
             }
-          ],
-          "credentials": []
-        },
-        {
-          "memberId": "Pablo_FernándezMontes",
-          "identities": [
-            {
-              "source": "github",
-              "username": "pafmon"
-            }
-          ],
-          "credentials": []
+          }
         }
-      ]
-    }
-  ],
-  "architectural-components": []
-}
+      }
+    ]
+  }
+]

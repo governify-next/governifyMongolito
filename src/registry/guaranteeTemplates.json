@@ -1,6 +1,7 @@
 [
     {
         "id": "GITHUB_TEAM_NUMBER_COMMITS",
+        "multiTarget": false,
         "info": {
             "title": "Number of Commits by Team",
             "subtitle": "Total Commits in Repository by Team",
@@ -8,17 +9,21 @@
             "example": "If a team has made 150 commits to the repository over the last month, this number reflects the team's overall contribution to the project's codebase.",
             "moreInfo": "Tracking the number of commits helps in understanding the team's activity level and engagement with the project."
         },
-        "operation": "GITHUB_TEAM_NUMBER_COMMITS",
-        "operator": null,
-        "objectiveValue": null,
+        "numericExpression": "GITHUB_TEAM_NUMBER_COMMITS",
+        "comparator": null,
+        "threshold": null,
         "metrics": [
             {
                 "id": "GITHUB_TEAM_NUMBER_COMMITS"
             }
-        ]
+        ],
+        "config": {
+            "elementId": null
+        }
     },
     {
         "id": "GITHUB_MEMBER_CONTRIBUTION_PERCENTAGE",
+        "multiTarget": true,
         "info": {
             "title": "Contribution by Member",
             "subtitle": "Percentage of Commits by Member",
@@ -26,9 +31,9 @@
             "example": "If a team member has made 30 commits out of a total of 150 commits made by the team, the contribution percentage would be (30/150)*100 = 20%.",
             "moreInfo": "This metric helps in assessing the active participation of individual team members in the project's development process."
         },
-        "operation": "(GITHUB_MEMBER_NUMBER_COMMITS/GITHUB_TEAM_NUMBER_COMMITS)*100",
-        "operator": null,
-        "objectiveValue": null,        
+        "numericExpression": "(GITHUB_MEMBER_NUMBER_COMMITS/GITHUB_TEAM_NUMBER_COMMITS)*100",
+        "comparator": null,
+        "threshold": null,        
         "metrics": [
             {
                 "id": "GITHUB_TEAM_NUMBER_COMMITS"
@@ -36,6 +41,10 @@
             {
                 "id": "GITHUB_MEMBER_NUMBER_COMMITS"
             }
-        ]
+        ],
+        "config": {
+            "elementId": null,
+            "elementPartId": null
+        }
     }
 ]

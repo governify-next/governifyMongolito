@@ -6,13 +6,13 @@
         "guaranteeTemplates": [
             {
                 "id": "GITHUB_TEAM_NUMBER_COMMITS",
-                "operator": "<=",
-                "objectiveValue": 5
+                "comparator": "<=",
+                "threshold": 5
             },
             {
                 "id": "GITHUB_MEMBER_CONTRIBUTION_PERCENTAGE",
-                "operator": ">=",
-                "objectiveValue": 15
+                "comparator": ">=",
+                "threshold": 15
             }
         ]
     }
