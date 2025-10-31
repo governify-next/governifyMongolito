@@ -1,11 +1,8 @@
-import { raw } from "express";
-
-const SCOPE_TO_BE_DETERMINED = "TO_BE_DETERMINED";
 const WINDOW_TO_BE_DETERMINED = "TO_BE_DETERMINED";
 
 const generateReport = (contract, periods=[], selectedGuarantees, element) => {
     if (selectedGuarantees) {
-        console.log("Selected guarantess not implemented yet");
+        console.log("Selected guarantees not implemented yet");
         return;
     }
     const fullResults = [];
