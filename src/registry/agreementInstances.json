@@ -4,7 +4,7 @@
         "auditableVersion": 1,
         "versions": [
             {
-                "version": 1,
+                "id": 1,
                 "validity": {
                     "earlyTermination": null,
                     "timeZone": "America/Los_Angeles"

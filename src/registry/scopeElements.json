@@ -17,7 +17,7 @@
         "auditConfig": {
           "credentials": {
             "github": {
-              "username": "member1"
+              "username": "juan"
             }
           }
         }
@@ -27,7 +27,7 @@
         "auditConfig": {
           "credentials": {
             "github": {
-              "username": "member2"
+              "username": "pedro"
             }
           }
         }

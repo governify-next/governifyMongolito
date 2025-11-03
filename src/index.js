@@ -5,10 +5,6 @@ export const microservices = {
     url: 'http://localhost:4001',
     port: 4001,
   },
-  scope: {
-    url: 'http://localhost:4002',
-    port: 4002,
-  },
   collector: {
     url: 'http://localhost:4003',
     port: 4003,
@@ -18,6 +14,22 @@ export const microservices = {
     port: 4004,
   },
 };
+
+import usecase from './usecase.js';
+
+const baseApp = express();
+
+baseApp.get('/', async (req, res) => {
+  const config = req.query;
+  await usecase.execute(config);
+  res.send('Base Application is running!');
+});
+
+baseApp.listen(4099, () => {
+  console.log('Base Application is running at http://localhost:4099');
+}
+);
+
 
 // ============================== Registry Service ==============================
 
@@ -41,8 +53,8 @@ registryApp.get('/agreements/:id', (req, res) => {
 });
 
 registryApp.post('/agreements', express.json(), (req, res) => {
-  const newAgreement = req.body;
-  const createdAgreement = agreementService.createAgreement(newAgreement);
+  const newAgreementInfo = req.body;
+  const createdAgreement = agreementService.createAgreement(newAgreementInfo);
   if (createdAgreement) {
     res.status(201).json(createdAgreement);
   } else {
@@ -60,23 +72,34 @@ registryApp.post('/agreementTemplate', express.json(), (req, res) => {
   }
 });
 
+registryApp.get('/agreementTemplates/:id', (req, res) => {
+  const templateId = req.params.id;
+  const template = agreementService.getAgreementTemplateById(templateId);
+  if (template) {
+    res.json(template);
+  } else {
+    res.status(404).send('Agreement template not found');
+  }
+});
+
+import scopeService from './registry/scopeService.js';
+
+registryApp.get('/elements/:id', (req, res) => {
+  const elementId = req.params.id;
+  const elements = scopeService.getScopeElementById(elementId);
+  if (elements) {
+    res.json(elements);
+  } else {
+    res.status(404).send('Element not found');
+  }
+});
+
 registryApp.listen(microservices.registry.port, () => {
   console.log(`Registry Service is running at: http://localhost:${microservices.registry.port}`);
 });
 
-// ============================== Scope Service ==============================
-
-const scopeApp = express();
-
-scopeApp.get('/', (req, res) => {
-  res.send('Scope Service is running!');
-});
-
-scopeApp.listen(microservices.scope.port, () => {
-  console.log(`Scope Service is running at http://localhost:${microservices.scope.port}`);
-});
-
 // ============================== Collector Application ==============================
+
 const collectorApp = express();
 
 collectorApp.get('/', (req, res) => {
@@ -98,8 +121,8 @@ reporterApp.get('/', (req, res) => {
 });
 
 reporterApp.post('/reports/generate',  express.json(), (req, res) => {
-  const { contract, periods, selectedGuarantees, element } = req.body;
-  const result = reporterService.generateReport(contract, periods, selectedGuarantees, element);
+  const { agreement, periods, selectedGuarantees, element } = req.body;
+  const result = reporterService.generateReport(agreement, periods, selectedGuarantees, element);
   res.send(result);
 });
 

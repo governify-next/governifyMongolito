@@ -1,6 +1,8 @@
+import e from 'express';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import scopeService from './scopeService.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -31,36 +33,80 @@ try {
     console.error('Error reading agreement templates file:', error);
 }
 
-function createAgreement(newAgreement) {
-    const agreementTemplate = agreementTemplates.find(template => template.id === newAgreement.agreementTemplateId);
+const getNewGuarantee = (guaranteeTemplateInfo, elementId, partId) => {
+    let newGuarantee = JSON.parse(JSON.stringify(guaranteeTemplateInfo));
+    newGuarantee.config = {};
+    newGuarantee.config.elementId = elementId;
+    if (partId) {
+        newGuarantee.config.elementPartId = partId;
+    }
+    return newGuarantee;
+}
+
+
+function createAgreement(newAgreementInfo) {
+    const element = scopeService.getScopeElementById(newAgreementInfo.elementId);
+    const agreementTemplate = agreementTemplates.find(template => template.id === newAgreementInfo.agreementTemplate.id);
+    const guaranteeTemplatesFromAgreementTemplate = agreementTemplate.guaranteeTemplates;
+    
+    let guaranteeInstances = [];
+    const modificationsMap = new Map(
+        newAgreementInfo.agreementTemplate.guaranteeModifications.map(m => [m.guaranteeTemplateId, m])
+    );
+
+    for (const guaranteeTemplateInfo of guaranteeTemplatesFromAgreementTemplate) {
+    const guaranteeTemplate = guaranteeTemplates.find(gt => gt.id === guaranteeTemplateInfo.id);
+    
+    if (!guaranteeTemplate.multiPart) {
+        // CASE: is single part (no need to subdivide in multiple guarantees)
+        guaranteeInstances.push(getNewGuarantee(guaranteeTemplateInfo, element.id));
+    } else {
+        // CASE: is multipart (generate one guarantee instance per part or per selected parts)
+        const modification = modificationsMap.get(guaranteeTemplateInfo.id);
+
+        let selectedParts = element.parts;
+        // If there are selected parts in the agreement creation for a guarantee, filter the parts accordingly
+        if (modification) selectedParts = element.parts.filter(p => modification.parts.includes(p.id))
+
+        for (const part of selectedParts) {
+        guaranteeInstances.push(getNewGuarantee(guaranteeTemplateInfo, element.id, part.id));
+        }
+    }
+    }
+
     if (!agreementTemplate) {
-        console.error('Agreement template not found:', newAgreement.agreementTemplateId);
+        console.error('Agreement template not found:', newAgreementInfo.agreementTemplate.id);
         return "Agreement template not found";
     }
-    if(agreements.find(a => a.id === newAgreement.id)) {
-        console.error('Agreement with this ID already exists:', newAgreement.id);
+
+    if (!agreementTemplate) {
+        console.error('Agreement template not found:', newAgreementInfo.agreementTemplate.id);
+        return "Agreement template not found";
+    }
+    if(agreements.find(a => a.id === newAgreementInfo.id)) {
+        console.error('Agreement with this ID already exists:', newAgreementInfo.id);
         return "Agreement with this ID already exists";
     }
     const agreement = {
-        id: newAgreement.id,
+        id: newAgreementInfo.id,
         auditableVersion: 1,
         versions: [
             {
-                version: 1,
+                id: 1,
                 validity: {
                     earlyTermination: null,
-                    timeZone: newAgreement.initialVersion.validity.timeZone
+                    timeZone: newAgreementInfo.initialVersion.validity.timeZone
                 },
                 contract: {
                     agreementTemplateId: agreementTemplate.id,
-                    guarantees: agreementTemplate.guaranteeTemplates,
+                    guarantees: guaranteeInstances,
                     validity: {
-                        start: newAgreement.initialVersion.validity.start,
-                        end: newAgreement.initialVersion.validity.end,
-                        timeZone: newAgreement.initialVersion.validity.timeZone
+                        start: newAgreementInfo.initialVersion.validity.start,
+                        end: newAgreementInfo.initialVersion.validity.end,
+                        timeZone: newAgreementInfo.initialVersion.validity.timeZone
                     }
                 },
-                moreInfo: newAgreement.initialVersion.moreInfo
+                moreInfo: newAgreementInfo.initialVersion.moreInfo
             }
         ]        
     };
@@ -83,6 +129,11 @@ function createAgreementTemplate(newTemplate) {
     return template;
 }
 
+function getAgreementTemplateById(id) {
+    let template = agreementTemplates.find(template => template.id === id);
+    return template;
+}
+
 function getAgreementById(id) {
     let agreement = agreements.find(agreement => agreement.id === id);
     return agreement;
@@ -99,7 +150,7 @@ function getFullAgreementById(id) {
                 guarantee.numericExpression = guaranteeTemplate.numericExpression;
                 guarantee.metrics = guaranteeTemplate.metrics;
                 guarantee.info = guaranteeTemplate.info;
-                guarantee.multiTarget = guaranteeTemplate.multiTarget;
+                guarantee.multiPart = guaranteeTemplate.multiPart;
             }
         }
     }
@@ -111,4 +162,5 @@ export default {
     createAgreementTemplate,
     getAgreementById,
     getFullAgreementById,
+    getAgreementTemplateById,
 };

@@ -1,6 +1,6 @@
 const WINDOW_TO_BE_DETERMINED = "TO_BE_DETERMINED";
 
-const generateReport = (contract, periods=[], selectedGuarantees, element) => {
+const generateReport = (agreement, periods=[], selectedGuarantees, element) => {
     if (selectedGuarantees) {
         console.log("Selected guarantees not implemented yet");
         return;
@@ -8,7 +8,7 @@ const generateReport = (contract, periods=[], selectedGuarantees, element) => {
     const fullResults = [];
     const results = [];
 
-    for (const guarantee of contract.guarantees) {
+    for (const guarantee of agreement.version.contract.guarantees) {
       const { metrics, numericExpression, comparator, threshold } = guarantee;
 
       const elementAuditConfig = element.auditConfig;
@@ -109,6 +109,7 @@ function GITHUB_TEAM_NUMBER_COMMITS() {
 function GITHUB_MEMBER_NUMBER_COMMITS(elementPartAuditConfig) {
     const result = [];
     for (const data of rawData[rawData.length - 1].rawData) {
+        console.log(elementPartAuditConfig)
         if(data.author === elementPartAuditConfig.credentials.github.username) {
             result.push(data);
         }

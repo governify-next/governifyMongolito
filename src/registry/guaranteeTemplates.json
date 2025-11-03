@@ -1,7 +1,7 @@
 [
     {
         "id": "GITHUB_TEAM_NUMBER_COMMITS",
-        "multiTarget": false,
+        "multiPart": false,
         "info": {
             "title": "Number of Commits by Team",
             "subtitle": "Total Commits in Repository by Team",
@@ -23,7 +23,7 @@
     },
     {
         "id": "GITHUB_MEMBER_CONTRIBUTION_PERCENTAGE",
-        "multiTarget": true,
+        "multiPart": true,
         "info": {
             "title": "Contribution by Member",
             "subtitle": "Percentage of Commits by Member",

@@ -15,3 +15,7 @@ try {
 function getScopeElementById(id) {
     return scopeElements.find(element => element.id === id);
 }
+
+export default {
+    getScopeElementById
+};
