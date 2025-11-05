@@ -1,7 +1,24 @@
 [
   {
     "id": "repository1",
-    "labels": ["Global", "Showcase"],
+    "organizationId": "ORG-001",
+    "fields": {
+      "label": "Project",
+      "project": "Molecular Project",
+      "class": "PSG2",
+      "group": "G1",
+      "color": "red",
+      "level": "advanced",
+      "experiment": "testGroupA",
+      "grade": 9.5
+    },
+    "permissions" : {
+      "view": ["admin", "supervisorsG1", "adminsUS"],
+      "edit": ["studentsMolproject"],
+      "create": ["supervisorsG1"],
+      "notify": ["adminsUS"],
+      "audit": ["adminsUS"]
+    },
     "auditConfig": {
       "credentials": {
         "github": {

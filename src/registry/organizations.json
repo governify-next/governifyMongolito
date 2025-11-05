@@ -1,0 +1,51 @@
+[
+    {
+        "id": "ORG-001",
+        "fields": [
+            {
+                "id": "class",
+                "type": "enumeration",
+                "values": ["PSG1", "PSG2", "PSG3"],
+                "name": "Class",
+                "description": "Class of the organization"
+            },
+            {
+                "id": "title",
+                "type": "string",
+                "name": "Title",
+                "description": "Title of the element"
+            }
+        ],
+        "roles":[
+            {
+                "id":"admin",
+                "name":"Administrator",
+                "description":"Administrator of the organization"
+            },
+            {
+                "id":"member-repository1",
+                "name":"Member of Repository 1",
+                "description":"Member of the first repository"
+            },
+            {
+                "id":"teacher-g1",
+                "name":"Teacher of Group G1",
+                "description":"Teacher of the first group"
+            }
+        ],
+        "usersByRole": [
+            {
+                "userId": "user-1",
+                "roleId": "admin"
+            },
+            {
+                "userId": "user-2",
+                "roleId": "member"
+            },
+            {
+                "userId": "user-3",
+                "roleId": "teacher-g1"
+            }
+        ]
+    }
+]

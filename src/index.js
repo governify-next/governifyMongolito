@@ -41,9 +41,9 @@ registryApp.get('/', (req, res) => {
   res.send('Registry Service is running!');
 });  
 
-registryApp.get('/agreements/:id', (req, res) => {
+registryApp.get('/agreements/:AgId', (req, res) => {
   const fillAgreement = req.query.full === 'true';
-  const agreementId = req.params.id;
+  const agreementId = req.params.AgId;
   const agreement = fillAgreement ? agreementService.getFullAgreementById(agreementId) : agreementService.getAgreementById(agreementId);
   if (agreement) {
     res.json(agreement);
@@ -62,7 +62,7 @@ registryApp.post('/agreements', express.json(), (req, res) => {
   }
 });
 
-registryApp.post('/agreementTemplate', express.json(), (req, res) => {
+registryApp.post('/agreementTemplates', express.json(), (req, res) => {
   const newTemplate = req.body;
   const createdTemplate = agreementService.createAgreementTemplate(newTemplate);
   if (createdTemplate) {
@@ -72,8 +72,8 @@ registryApp.post('/agreementTemplate', express.json(), (req, res) => {
   }
 });
 
-registryApp.get('/agreementTemplates/:id', (req, res) => {
-  const templateId = req.params.id;
+registryApp.get('/agreementTemplates/:AgTemplateId', (req, res) => {
+  const templateId = req.params.AgTemplateId;
   const template = agreementService.getAgreementTemplateById(templateId);
   if (template) {
     res.json(template);
@@ -81,16 +81,92 @@ registryApp.get('/agreementTemplates/:id', (req, res) => {
     res.status(404).send('Agreement template not found');
   }
 });
-
+ 
 import scopeService from './registry/scopeService.js';
 
-registryApp.get('/elements/:id', (req, res) => {
-  const elementId = req.params.id;
-  const elements = scopeService.getScopeElementById(elementId);
-  if (elements) {
-    res.json(elements);
+registryApp.get('/organizations/:orgId/user/:userId/elements', (req, res) => {
+  const orgId = req.params.orgId;
+  const userId = req.params.userId;
+  const filters = req.query;
+  console.log('Filters received:', JSON.stringify(filters, null, 2));
+
+  const elements = scopeService.getElementsBasedOnOrgUserAndFilters(orgId,userId,filters);
+  res.json(elements);
+}
+);
+
+registryApp.get('/organizations/:orgId/elements/:elementId', (req, res) => {
+  const orgId = req.params.orgId;
+  const elementId = req.params.elementId;
+  const element = scopeService.getElementById(orgId, elementId);
+  if (element) {
+    res.json(element);
   } else {
     res.status(404).send('Element not found');
+  }
+});
+
+registryApp.post('/organizations/:orgId/elements', express.json(), (req, res) => {
+  const orgId = req.params.orgId;
+  const newElement = req.body;
+  const createdElement = scopeService.createElementInOrganization(orgId, newElement);
+  if (createdElement) {
+    res.status(201).json(createdElement);
+  } else {
+    res.status(500).send('Error creating element');
+  }
+});
+
+registryApp.post('/organizations', express.json(), (req, res) => {
+  const newOrg = req.body;
+  const createdOrg = scopeService.createOrganization(newOrg);
+  if (createdOrg) {
+    res.status(201).json(createdOrg);
+  } else {
+    res.status(500).send('Error creating organization');
+  }
+});
+
+registryApp.get('/organizations/:orgId', (req, res) => {
+  const orgId = req.params.orgId;
+  const organization = scopeService.getOrganizationById(orgId);
+  if (organization) {
+    res.json(organization);
+  } else {
+    res.status(404).send('Organization not found');
+  }
+});
+
+registryApp.post('/organizations/:orgId/members', express.json(), (req, res) => {
+  const orgId = req.params.orgId;
+  const newMemberWithRole = req.body;
+  const updatedOrg = scopeService.addMemberToOrganizationWithRole(orgId, newMemberWithRole.userId, newMemberWithRole.roleId);
+  if (updatedOrg) {
+    res.json(updatedOrg);
+  } else {
+    res.status(404).send('Organization not found');
+  }
+});
+
+registryApp.post('/organizations/:orgId/roles', express.json(), (req, res) => {
+  const orgId = req.params.orgId;
+  const newRole = req.body;
+  const updatedOrg = scopeService.addRoleToOrganization(orgId, newRole);
+  if (updatedOrg) {
+    res.json(updatedOrg);
+  } else {
+    res.status(404).send('Organization not found');
+  }
+});
+
+registryApp.post('/organizations/:orgId/fields', express.json(), (req, res) => {
+  const orgId = req.params.orgId;
+  const newField = req.body;
+  const updatedOrg = scopeService.addFieldToOrganization(orgId, newField);
+  if (updatedOrg) {
+    res.json(updatedOrg);
+  } else {
+    res.status(404).send('Organization not found');
   }
 });
 

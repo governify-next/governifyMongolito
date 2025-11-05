@@ -1,10 +1,30 @@
 [
     {
         "id": "PSG2-2526",
-        "labels": ["España", "Andalucia", "Sevilla", "Software", "PSG2", "2526"]
+        "fields": {
+            "country": "España",
+            "region": "Andalucía",
+            "city": "Sevilla",
+            "field": "Programación de Software",
+            "university": "US",
+            "class": "PSG2",
+            "group": "G1",
+            "level": "advanced",
+            "experiment": "testGroupA"
+        }
     },
     {
         "id": "UCLM-2526",
-        "labels": ["España", "Castilla-La Mancha", "Ciudad Real", "Software", "UCLM", "2526"]
+        "fields": {
+            "country": "España",
+            "region": "Castilla-La Mancha",
+            "city": "Ciudad Real",
+            "field": "Programación de Software",
+            "university": "UCLM",
+            "class": "PSG1",
+            "group": "G2",
+            "level": "intermediate",
+            "experiment": "controlGroup"
+        }
     }
 ]
