@@ -1,7 +1,7 @@
 [
     {
         "id": "ORG-001",
-        "fields": [
+        "elementFields": [
             {
                 "id": "class",
                 "type": "enumeration",
@@ -14,6 +14,20 @@
                 "type": "string",
                 "name": "Title",
                 "description": "Title of the element"
+            }
+        ],
+        "agreementFields": [
+            {
+                "id": "experiment",
+                "type": "string",
+                "name": "Experiment",
+                "description": "Experiment associated with the agreement"
+            },
+            {
+                "id": "grade",
+                "type": "number",
+                "name": "Grade",
+                "description": "Grade associated with the agreement"
             }
         ],
         "roles":[

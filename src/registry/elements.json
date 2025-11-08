@@ -4,7 +4,7 @@
     "organizationId": "ORG-001",
     "fields": {
       "label": "Project",
-      "project": "Molecular Project",
+      "project": "Project g7-75",
       "class": "PSG2",
       "group": "G1",
       "color": "red",
@@ -13,11 +13,11 @@
       "grade": 9.5
     },
     "permissions" : {
-      "view": ["admin", "supervisorsG1", "adminsUS"],
-      "edit": ["studentsMolproject"],
-      "create": ["supervisorsG1"],
-      "notify": ["adminsUS"],
-      "audit": ["adminsUS"]
+      "view": ["profesores-g7", "alumnos-g7-75"],
+      "edit": ["profesores-g7"],
+      "create": ["profesores-g7"],
+      "notify": ["profesores-g7"],
+      "audit": ["profesores-g7"]
     },
     "auditConfig": {
       "credentials": {

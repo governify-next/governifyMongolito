@@ -27,7 +27,6 @@ const execute = async (config) => {
                 end: "mañana",
                 timeZone: "America/Los_Angeles"
             },
-            moreInfo: {}
         },
         elementId: elementId
     })).data

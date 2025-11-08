@@ -1,7 +1,26 @@
 [
     {
         "id": "a1",
+        "organizationId": "ORG-001",
+        "elementId": "repository1",
         "auditableVersion": 1,
+        "fields": {
+            "label": "Project",
+            "project": "Molecular Project",
+            "class": "PSG2",
+            "group": "G1",
+            "color": "red",
+            "level": "advanced",
+            "experiment": "testGroupA",
+            "grade": 9.5
+        },
+        "permissions" : {
+            "view": ["profesores-g7", "alumnos-g7-75"],
+            "edit": ["profesores-g7"],
+            "create": ["profesores-g7"],
+            "notify": ["profesores-g7"],
+            "audit": ["profesores-g7"]
+        },
         "versions": [
             {
                 "id": 1,
@@ -44,9 +63,6 @@
                         "end": "2023-01-01",
                         "timeZone": "America/Los_Angeles"
                     }
-                },
-                "moreInfo": {
-                    "dashboard": "http://example.com/dashboard/agreement/F2D3E6B2-1234-5678-9ABC-DEF123456789"
                 }
             }
         ]

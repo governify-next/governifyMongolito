@@ -151,7 +151,7 @@ function addFieldToOrganization(orgId, newField) {
 }   
 
 export default {
-    getElementById: getElementByOrganizationIdAndElementId,
+    getElementByOrganizationIdAndElementId,
     getElementsBasedOnOrgUserAndFilters,
     getOrganizationById,
     createOrganization,

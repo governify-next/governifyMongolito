@@ -41,7 +41,6 @@ describe('End-to-End Test for Usecase', () => {
                   end: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
                   timeZone: "America/Los_Angeles",
               },
-              moreInfo: {},
           },
           elementId: "repository1",
       };
@@ -154,7 +153,7 @@ describe('End-to-End Test with Guarantee Modifications', () => {
                       guaranteeTemplateId: "GITHUB_MEMBER_CONTRIBUTION_PERCENTAGE",
                       parts: ["member1"]
                   }
-              ],
+              ]
           },
           id: agreementId,
           initialVersion: {
@@ -162,8 +161,7 @@ describe('End-to-End Test with Guarantee Modifications', () => {
                   start: new Date().toISOString(), 
                   end: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
                   timeZone: "America/Los_Angeles",
-              },
-              moreInfo: {},
+              }
           },
           elementId: "repository1",
       };

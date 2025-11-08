@@ -42,9 +42,8 @@ const getNewGuarantee = (guaranteeTemplateInfo, elementId, partId) => {
     return newGuarantee;
 }
 
-
-function createAgreement(newAgreementInfo) {
-    const element = scopeService.getScopeElementById(newAgreementInfo.elementId);
+function createAgreement(orgId, elementId, newAgreementInfo) {
+    const element = scopeService.getElementByOrganizationIdAndElementId(orgId, elementId);
     const agreementTemplate = agreementTemplates.find(template => template.id === newAgreementInfo.agreementTemplate.id);
     const guaranteeTemplatesFromAgreementTemplate = agreementTemplate.guaranteeTemplates;
     
@@ -88,6 +87,8 @@ function createAgreement(newAgreementInfo) {
     }
     const agreement = {
         id: newAgreementInfo.id,
+        organizationId: orgId,
+        elementId: elementId,
         auditableVersion: 1,
         versions: [
             {
@@ -104,10 +105,11 @@ function createAgreement(newAgreementInfo) {
                         end: newAgreementInfo.initialVersion.validity.end,
                         timeZone: newAgreementInfo.initialVersion.validity.timeZone
                     }
-                },
-                moreInfo: newAgreementInfo.initialVersion.moreInfo
+                }
             }
-        ]        
+        ],
+        fields: newAgreementInfo.fields,
+        permissions: newAgreementInfo.permissions
     };
     agreements.push(agreement);
     return agreement;
@@ -133,14 +135,38 @@ function getAgreementTemplateById(id) {
     return template;
 }
 
-function getAgreementById(id) {
-    let agreement = agreements.find(agreement => agreement.id === id);
+function getAgreementsByOrgIdAndElementId(filters, orgId = null, elementId = null) {
+    let agreementsResult = [];
+    if (elementId) {
+        agreementsResult = agreements.filter(agreement => agreement.organizationId === orgId && agreement.elementId === elementId);
+    } else {
+        agreementsResult = agreements.filter(agreement => agreement.organizationId === orgId);
+    }
+    agreementsResult = agreementsResult.filter(agreement => {
+        return Object.keys(filters).every(filterKey => agreement.fields[filterKey] === filters[filterKey]);
+    });
+    return agreementsResult;
+}
+
+function getAgreementById(id, orgId = null, elementId = null) {
+    let agreement = null;
+    if (elementId) {
+        agreement = agreements.find(agreement => agreement.organizationId === orgId && agreement.elementId === elementId && agreement.id === id);
+    } else {
+        agreement = agreements.find(agreement => agreement.id === id && agreement.organizationId && agreement.elementId);
+    }
+    if (!agreement) return "Agreement not found";
     return agreement;
 }
 
-function getFullAgreementById(id) {
-    let agreement = agreements.find(agreement => agreement.id === id);
-    if (!agreement) return null;
+function getFullAgreementById(id, orgId = null, elementId = null) {
+    let agreement = null;
+    if (elementId) {
+        agreement = agreements.find(agreement => agreement.organizationId === orgId && agreement.elementId === elementId && agreement.id === id);
+    } else {
+        agreement = agreements.find(agreement => agreement.id === id && agreement.organizationId && agreement.elementId);
+    }
+    if (!agreement) return "Agreement not found";
     let agreementCopy = JSON.parse(JSON.stringify(agreement));
     for (const version of agreementCopy.versions) {
         for (const guarantee of version.contract.guarantees) {
@@ -162,4 +188,5 @@ export default {
     getAgreementById,
     getFullAgreementById,
     getAgreementTemplateById,
+    getAgreementsByOrgIdAndElementId
 };

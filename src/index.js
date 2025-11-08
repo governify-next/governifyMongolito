@@ -13,6 +13,10 @@ export const microservices = {
     url: 'http://localhost:4004',
     port: 4004,
   },
+  user: {
+    url: 'http://localhost:4002',
+    port: 4002
+  }
 };
 
 import usecase from './usecase.js';
@@ -30,7 +34,6 @@ baseApp.listen(4099, () => {
 }
 );
 
-
 // ============================== Registry Service ==============================
 
 import agreementService from './registry/agreementService.js';
@@ -41,10 +44,24 @@ registryApp.get('/', (req, res) => {
   res.send('Registry Service is running!');
 });  
 
-registryApp.get('/agreements/:AgId', (req, res) => {
+registryApp.get('/organizations/:orgId/elements/:elementId/agreements', (req, res) => {
+  const filters = req.query;
+  const orgId = req.params.orgId;
+  const elementId = req.params.elementId;
+  const agreements = agreementService.getAgreementsByOrgIdAndElementId(filters, orgId, elementId);
+  if (agreements) {
+    res.json(agreements);
+  } else {
+    res.status(404).send('Agreement not found');
+  }
+});
+
+registryApp.get('/organizations/:orgId/elements/:elementId/agreements/:agreementId', (req, res) => {
   const fillAgreement = req.query.full === 'true';
-  const agreementId = req.params.AgId;
-  const agreement = fillAgreement ? agreementService.getFullAgreementById(agreementId) : agreementService.getAgreementById(agreementId);
+  const orgId = req.params.orgId;
+  const elementId = req.params.elementId;
+  const agreementId = req.params.agreementId;
+  const agreement = fillAgreement ? agreementService.getFullAgreementById(agreementId, orgId, elementId) : agreementService.getAgreementById(agreementId, orgId, elementId);
   if (agreement) {
     res.json(agreement);
   } else {
@@ -52,9 +69,34 @@ registryApp.get('/agreements/:AgId', (req, res) => {
   }
 });
 
-registryApp.post('/agreements', express.json(), (req, res) => {
+registryApp.get('/organizations/:orgId/agreements', (req, res) => {
+  const filters = req.query;
+  const orgId = req.params.orgId;
+  const agreements = agreementService.getAgreementsByOrgIdAndElementId(filters, orgId);
+  if (agreements) {
+    res.json(agreements);
+  } else {
+    res.status(404).send('Agreement not found');
+  }
+});
+
+registryApp.get('/organizations/:orgId/agreements/:AgId', (req, res) => {
+  const fillAgreement = req.query.full === 'true';
+  const orgId = req.params.orgId;
+  const agreementId = req.params.AgId;
+  const agreement = fillAgreement ? agreementService.getFullAgreementById(agreementId, orgId) : agreementService.getAgreementById(agreementId, orgId);
+  if (agreement) {
+    res.json(agreement);
+  } else {
+    res.status(404).send('Agreement not found');
+  }
+});
+
+registryApp.post('/organizations/:orgId/elements/:elementId/agreements', express.json(), (req, res) => {
+  const orgId = req.params.orgId;
+  const elementId = req.params.elementId;
   const newAgreementInfo = req.body;
-  const createdAgreement = agreementService.createAgreement(newAgreementInfo);
+  const createdAgreement = agreementService.createAgreement(orgId, elementId, newAgreementInfo); //HAY QUE VALIDAR LOS FIELDS Y PERMISSIONS. USANDO LA MISMA FUNCION QUE EN EL PUT
   if (createdAgreement) {
     res.status(201).json(createdAgreement);
   } else {
@@ -81,6 +123,8 @@ registryApp.get('/agreementTemplates/:AgTemplateId', (req, res) => {
     res.status(404).send('Agreement template not found');
   }
 });
+
+registryApp.get
  
 import scopeService from './registry/scopeService.js';
 
@@ -88,8 +132,6 @@ registryApp.get('/organizations/:orgId/user/:userId/elements', (req, res) => {
   const orgId = req.params.orgId;
   const userId = req.params.userId;
   const filters = req.query;
-  console.log('Filters received:', JSON.stringify(filters, null, 2));
-
   const elements = scopeService.getElementsBasedOnOrgUserAndFilters(orgId,userId,filters);
   res.json(elements);
 }
@@ -98,7 +140,7 @@ registryApp.get('/organizations/:orgId/user/:userId/elements', (req, res) => {
 registryApp.get('/organizations/:orgId/elements/:elementId', (req, res) => {
   const orgId = req.params.orgId;
   const elementId = req.params.elementId;
-  const element = scopeService.getElementById(orgId, elementId);
+  const element = scopeService.getElementByOrganizationIdAndElementId(orgId, elementId);
   if (element) {
     res.json(element);
   } else {
@@ -106,10 +148,10 @@ registryApp.get('/organizations/:orgId/elements/:elementId', (req, res) => {
   }
 });
 
-registryApp.post('/organizations/:orgId/elements', express.json(), (req, res) => {
+registryApp.post('/organizations/:orgId/elements', express.json(), (req, res) => { 
   const orgId = req.params.orgId;
   const newElement = req.body;
-  const createdElement = scopeService.createElementInOrganization(orgId, newElement);
+  const createdElement = scopeService.createElementInOrganization(orgId, newElement); //HAY QUE VALIDAR LOS FIELDS Y PERMISSIONS. USANDO LA MISMA FUNCION QUE EN EL PUT
   if (createdElement) {
     res.status(201).json(createdElement);
   } else {
@@ -204,4 +246,44 @@ reporterApp.post('/reports/generate',  express.json(), (req, res) => {
 
 reporterApp.listen(microservices.reporter.port, () => {
   console.log(`Reporter Application is running at http://localhost:${microservices.reporter.port}`);
+});
+
+// ============================== User Service ==============================
+
+import userService from './user/userService.js';
+
+const userApp = express();
+
+userApp.get('/', (req, res) => {
+  res.send('User Service is running!');
+});
+
+userApp.get('/users', (req, res) => {
+  // no filters: always return all users
+  const users = userService.getAllUsers();
+  res.json(users);
+});
+
+userApp.get('/users/:userId', (req, res) => {
+  const userId = req.params.userId;
+  const user = userService.getUserById(userId);
+  if (user) {
+    res.json(user);
+  } else {
+    res.status(404).send('User not found');
+  }
+});
+
+userApp.post('/users', express.json(), (req, res) => {
+  const newUser = req.body;
+  const created = userService.createUser(newUser);
+  if (created && created.error) {
+    res.status(400).json(created);
+  } else {
+    res.status(201).json(created);
+  }
+});
+
+userApp.listen(microservices.user.port, () => {
+  console.log(`User Service is running at: http://localhost:${microservices.user.port}`);
 });
