@@ -7,12 +7,20 @@
             {
                 "id": "GITHUB_TEAM_NUMBER_COMMITS",
                 "comparator": "<=",
-                "threshold": 5
+                "threshold": 5,
+                "window": {
+                    "period": "daily",
+                    "index": 0
+                }
             },
             {
                 "id": "GITHUB_MEMBER_CONTRIBUTION_PERCENTAGE",
                 "comparator": ">=",
-                "threshold": 15
+                "threshold": 15,
+                "window": {
+                    "period": "hourly",
+                    "index": 5
+                }
             }
         ]
     }

@@ -35,6 +35,10 @@
                             "id": "GITHUB_TEAM_NUMBER_COMMITS",
                             "comparator": "<=",
                             "threshold": 5,
+                            "window": {
+                                "period": "daily",
+                                "index": 0
+                            },
                             "config": {
                                 "elementId": "repository1"
                             }
@@ -43,6 +47,10 @@
                             "id": "GITHUB_MEMBER_CONTRIBUTION_PERCENTAGE",
                             "comparator": ">=",
                             "threshold": 15,
+                            "window": {
+                                "period": "hourly",
+                                "index": 5
+                            },
                             "config": {
                                 "elementId": "repository1",
                                 "elementPartId": "member1"
@@ -52,6 +60,10 @@
                             "id": "GITHUB_MEMBER_CONTRIBUTION_PERCENTAGE",
                             "comparator": ">=",
                             "threshold": 15,
+                            "window": {
+                                "period": "hourly",
+                                "index": 5
+                            },
                             "config": {
                                 "elementId": "repository1",
                                 "elementPartId": "member2"

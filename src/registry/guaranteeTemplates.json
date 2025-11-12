@@ -9,6 +9,10 @@
             "example": "If a team has made 150 commits to the repository over the last month, this number reflects the team's overall contribution to the project's codebase.",
             "moreInfo": "Tracking the number of commits helps in understanding the team's activity level and engagement with the project."
         },
+        "window":{
+            "period": null,
+            "index": null
+        },
         "numericExpression": "GITHUB_TEAM_NUMBER_COMMITS",
         "comparator": null,
         "threshold": null,
@@ -30,6 +34,10 @@
             "description": "This guarantee measures the percentage of commits made by a specific team member compared to the total number of commits made by the entire team.",
             "example": "If a team member has made 30 commits out of a total of 150 commits made by the team, the contribution percentage would be (30/150)*100 = 20%.",
             "moreInfo": "This metric helps in assessing the active participation of individual team members in the project's development process."
+        },
+        "window":{
+            "period": null,
+            "index": null
         },
         "numericExpression": "(GITHUB_MEMBER_NUMBER_COMMITS/GITHUB_TEAM_NUMBER_COMMITS)*100",
         "comparator": null,

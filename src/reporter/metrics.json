@@ -1,0 +1,23 @@
+[
+    {
+        "id": "GITHUB_TEAM_NUMBER_COMMITS",
+        "fields": {
+            "api": "github",
+            "scope": "team",
+            "target": "commits"
+        },
+        "fetcherId": "FETCH_COMMIT_FROM_GITHUB_REPOSITORY",
+        "moreInfo": {
+            "title": "Number of Commits by Team",
+            "description": "Total number of commits made to a specific repository by the entire team.",
+            "defaultConfig": {
+                "description": "Este window indica la ventana deslizante desde el tiempo de calculo hacia atrás. En este caso se hace override de la guaratee window. que tiene un initial fijo cara cada instancia de window.",
+                "item": {
+                    "window": "LAST_1_MONTH",
+                    "any": true
+                }
+            }
+        },
+        "code": null
+    }
+]

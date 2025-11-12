@@ -1,0 +1,29 @@
+[
+    {
+        "elementId": "repository1",
+        "dataType": "GITHUB_COMMIT",
+        "fields": {
+            "partId": "member1"
+        },
+        "startedAt": "2024-01-12T21:05:00Z",
+        "date": "2024-01-13T21:00:00Z",
+        "rawData": [
+            { "type": "commit", "title": "Commit 1", "author": "pedro", "date": "2024-01-10T00:00:00Z" },
+            { "type": "commit", "title": "Commit 2", "author": "juan", "date": "2024-01-12T00:00:00Z" }
+        ]
+    },
+    {
+        "elementId": "repository1",
+        "dataType": "GITHUB_COMMIT",
+        "fields": {
+            "partId": "member1"
+        },
+        "startedAt": "2024-01-15T21:05:00Z",
+        "date": "2024-01-15T21:00:00Z",
+        "rawData": [
+            { "type": "commit", "title": "Commit 1: modifed", "author": "pedro", "date": "2024-01-10T00:00:00Z" },
+            { "type": "commit", "title": "Commit 2", "author": "juan", "date": "2024-01-12T00:00:00Z" },
+            { "type": "commit", "title": "Commit 3", "author": "pedro", "date": "2024-01-15T20:30:00Z" }
+        ]
+    }
+]

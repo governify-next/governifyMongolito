@@ -34,6 +34,12 @@ try {
 
 const getNewGuarantee = (guaranteeTemplateInfo, elementId, partId) => {
     let newGuarantee = JSON.parse(JSON.stringify(guaranteeTemplateInfo));
+    // WINDOW CONFIGURATION
+    newGuarantee.window = {};
+    newGuarantee.window.period = guaranteeTemplateInfo.window.period;
+    newGuarantee.window.index = guaranteeTemplateInfo.window.index ?? 0;
+
+    // SPECIFIC CONFIGURATION FOR ELEMENT / PART
     newGuarantee.config = {};
     newGuarantee.config.elementId = elementId;
     if (partId) {

@@ -240,7 +240,7 @@ reporterApp.get('/', (req, res) => {
 
 reporterApp.post('/reports/generate',  express.json(), (req, res) => {
   const { agreement, periods, selectedGuarantees, element } = req.body;
-  const result = reporterService.generateReport(agreement, periods, selectedGuarantees, element);
+  const result = reporterService.generateState(agreement, periods, selectedGuarantees, element);
   res.send(result);
 });
 
